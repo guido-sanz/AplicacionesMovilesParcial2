@@ -1,10 +1,9 @@
 package com.example.aplicacionesmovilesparcial2.repository
 
-import com.example.aplicacionesmovilesparcial2.repository.Repositorio
+import ForecastHour
+import WeatherResponse
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Clima
-import com.example.aplicacionesmovilesparcial2.repository.modelos.ForecastDTO
-import com.example.aplicacionesmovilesparcial2.repository.modelos.ListForecast
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -56,19 +55,26 @@ class RepositorioApi : Repositorio {
         }
     }
 
-    override suspend fun traerPronostico(nombre: String): List<ListForecast> {
+    override suspend fun traerPronostico(lat: Float, lon: Float): List<ForecastHour> {
+        return try {
+            val respuesta = cliente.get("https://api.openweathermap.org/data/2.5/forecast") {
+                parameter("lat", lat)
+                parameter("lon", lon)
+                parameter("cnt", 4)
+                parameter("units", "metric")
+                parameter("appid", apiKey)
+            }
 
-        val respuesta = cliente.get("https://api.openweathermap.org/data/2.5/forecast"){
-            parameter("q",nombre)
-            parameter("units","metric")
-            parameter("appid",apiKey)
+            if (respuesta.status == HttpStatusCode.OK) {
+                val forecast = respuesta.body<WeatherResponse>()
+                forecast.list
+            } else {
+                throw Exception("Respuesta no exitosa: ${respuesta.status}")
+            }
+        } catch (e: Exception) {
+            println("Error al traer el pronóstico: ${e.message}")
+            e.printStackTrace()
+            emptyList()
         }
-        if (respuesta.status == HttpStatusCode.OK){
-            val forecast = respuesta.body<ForecastDTO>()
-            return forecast.list
-        }else{
-            throw Exception()
-        }
-
     }
 }
