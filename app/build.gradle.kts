@@ -59,6 +59,12 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.11")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.11")
 
+    implementation("com.patrykandpatrick.vico:compose:2.1.2")
+    implementation("com.patrykandpatrick.vico:compose-m2:2.1.2")
+    implementation("com.patrykandpatrick.vico:compose-m3:2.1.2")
+    implementation("com.patrykandpatrick.vico:multiplatform:2.1.2")
+    implementation("com.patrykandpatrick.vico:views:2.1.2")
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)

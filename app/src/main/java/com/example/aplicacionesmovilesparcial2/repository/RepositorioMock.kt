@@ -1,8 +1,8 @@
 package com.example.aplicacionesmovilesparcial2.repository
 
+import ForecastHour
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Clima
-import com.example.aplicacionesmovilesparcial2.repository.modelos.ListForecast
 
 class RepositorioMock  : Repositorio {
 
@@ -32,7 +32,7 @@ class RepositorioMock  : Repositorio {
         TODO("Not yet implemented")
     }
 
-    override suspend fun traerPronostico(nombre: String): List<ListForecast> {
+    override suspend fun traerPronostico(lat: Float, lon: Float): List<ForecastHour> {
         TODO("Not yet implemented")
     }
 }
@@ -48,7 +48,7 @@ class RepositorioMockError  : Repositorio {
         throw Exception()
     }
 
-    override suspend fun traerPronostico(nombre: String): List<ListForecast> {
+    override suspend fun traerPronostico(lat: Float, lon: Float): List<ForecastHour> {
         throw Exception()
     }
 }
