@@ -8,13 +8,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
+import com.example.aplicacionesmovilesparcial2.repository.modelos.Location
 import com.example.aplicacionesmovilesparcial2.router.Router
 import com.example.aplicacionesmovilesparcial2.router.Ruta
 import kotlinx.coroutines.launch
 
 class CiudadesViewModel(
     val repositorio: Repositorio,
-    val router: Router
+    val router: Router,
+    val location: Location
 ) : ViewModel(){
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
@@ -57,12 +59,13 @@ class CiudadesViewModel(
 
 class CiudadesViewModelFactory(
     private val repositorio: Repositorio,
-    private val router: Router
+    private val router: Router,
+    private val location: Location
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CiudadesViewModel::class.java)) {
-            return CiudadesViewModel(repositorio,router) as T
+            return CiudadesViewModel(repositorio,router, location) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

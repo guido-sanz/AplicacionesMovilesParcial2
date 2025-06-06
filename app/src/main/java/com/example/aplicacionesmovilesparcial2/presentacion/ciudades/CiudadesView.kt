@@ -33,8 +33,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.aplicacionesmovilesparcial2.Manifest
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.location.LocationServices
 
 
 @Composable
@@ -42,7 +46,9 @@ fun CiudadesView(
     modifier: Modifier = Modifier,
     state: CiudadesEstado,
     onAction: (CiudadesIntencion) -> Unit
-) {
+)
+
+{
     var value by remember { mutableStateOf("") }
 
     Column(
@@ -116,6 +122,7 @@ fun CiudadesView(
             CiudadesEstado.Vacio -> {
                 EstadoInicialView()
             }
+
         }
     }
 }
