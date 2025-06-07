@@ -1,11 +1,11 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima.pronostico
 
-import ForecastHour
+import ForecastDay
 
 
 sealed class PronosticoEstado {
     data class Exitoso (
-        val climas: List<ForecastHour>,
+        val climas: List<ForecastDay>,
         ) : PronosticoEstado()
     data class Error(
         val mensaje :String = "",

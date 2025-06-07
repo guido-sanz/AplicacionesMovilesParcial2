@@ -1,5 +1,6 @@
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 data class WeatherResponse(
@@ -83,4 +84,10 @@ data class Rain(
 @Serializable
 data class Sys(
     val pod: String
+)
+
+data class ForecastDay(
+    val date: LocalDate,
+    val tempMax: Double,
+    val tempMin: Double
 )
