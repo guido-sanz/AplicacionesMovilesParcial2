@@ -1,18 +1,22 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.actual.ClimaView
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.actual.ClimaViewModel
@@ -51,24 +55,19 @@ fun ClimaPage(
         )
     )
 
+    val climaState = viewModel.uiState
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF8EC5FC),
-                        Color(0xFFE0C3FC)
-                    )
-                )
-            )
-            .padding(16.dp)
     ) {
+        ClimaBackground(climaState)
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
+
             ClimaView(
                 state = viewModel.uiState,
                 onAction = { intencion ->
@@ -84,4 +83,7 @@ fun ClimaPage(
         }
     }
 }
+
+
+
 
