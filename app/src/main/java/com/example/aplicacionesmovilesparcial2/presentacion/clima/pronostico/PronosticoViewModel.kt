@@ -1,4 +1,5 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima.pronostico
+import ForecastDay
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.router.Router
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class PronosticoViewModel(
     val respositorio: Repositorio,
@@ -28,12 +30,22 @@ class PronosticoViewModel(
     fun traerPronostico() {
         uiState = PronosticoEstado.Cargando
         viewModelScope.launch {
-            try{
-                val forecast = respositorio.traerPronostico(lat, lon).filter {
-                    true
-                }
-                uiState = PronosticoEstado.Exitoso(forecast)
-            } catch (exception: Exception){
+            try {
+                val forecastHours = respositorio.traerPronostico(lat, lon)
+
+                val dailyForecast = forecastHours.groupBy {
+                    // Extraer LocalDate desde la cadena dtTxt
+                    LocalDate.parse(it.dtTxt.substring(0, 10))
+                }.map { (date, forecasts) ->
+                    ForecastDay(
+                        date = date,
+                        tempMax = forecasts.maxOf { it.main.tempMax },
+                        tempMin = forecasts.minOf { it.main.tempMin }
+                    )
+                }.sortedBy { it.date }
+
+                uiState = PronosticoEstado.Exitoso(dailyForecast)
+            } catch (exception: Exception) {
                 uiState = PronosticoEstado.Error(exception.localizedMessage ?: "error desconocido")
             }
         }
