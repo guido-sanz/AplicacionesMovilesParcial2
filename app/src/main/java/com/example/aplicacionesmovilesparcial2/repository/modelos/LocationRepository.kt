@@ -6,14 +6,14 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-interface LocationReposotory {
+interface LocationRepository {
     suspend fun getLocation() : Location?
 }
 
-class LocationImplementation(private val context: Context) : LocationReposotory {
+class LocationImplementation(private val context: Context) : LocationRepository {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-    override suspend fun getLocation(): android.location.Location? {
+    override suspend fun getLocation(): Location? {
         return suspendCancellableCoroutine { continuation ->
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->

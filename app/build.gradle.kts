@@ -67,6 +67,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:multiplatform:2.1.2")
     implementation("com.patrykandpatrick.vico:views:2.1.2")
     implementation(libs.play.services.location)
+    implementation(libs.transportation.consumer)
 
     testImplementation(libs.junit)
 
