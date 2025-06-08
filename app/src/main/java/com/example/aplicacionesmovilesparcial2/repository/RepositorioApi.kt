@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 class RepositorioApi : Repositorio {
 
-    private val apiKey = "95e93e4f7a36fc511148468d1774792d"
+    private val apiKey = "11e4d906fcd4207dd127fd03250e6f61"
 
     private val cliente = HttpClient(){
         install(ContentNegotiation){
@@ -60,7 +60,6 @@ class RepositorioApi : Repositorio {
             val respuesta = cliente.get("https://api.openweathermap.org/data/2.5/forecast") {
                 parameter("lat", lat)
                 parameter("lon", lon)
-                parameter("cnt", 4)
                 parameter("units", "metric")
                 parameter("appid", apiKey)
             }
