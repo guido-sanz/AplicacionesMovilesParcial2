@@ -1,5 +1,6 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.ciudades
 
+import android.location.Location
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
-import com.example.aplicacionesmovilesparcial2.repository.modelos.Location
+import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationImplementation
 import com.example.aplicacionesmovilesparcial2.router.Router
 import com.example.aplicacionesmovilesparcial2.router.Ruta
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 class CiudadesViewModel(
     val repositorio: Repositorio,
     val router: Router,
-    val location: Location
+    val location: LocationImplementation
 ) : ViewModel(){
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
@@ -26,6 +27,7 @@ class CiudadesViewModel(
         when(intencion){
             is CiudadesIntencion.Buscar -> buscar(nombre = intencion.nombre)
             is CiudadesIntencion.Seleccionar -> seleccionar(ciudad = intencion.ciudad)
+            is CiudadesIntencion.ObtenerUbicacion -> obtenerUbicacion()
         }
     }
 
@@ -54,13 +56,38 @@ class CiudadesViewModel(
         )
         router.navegar(ruta)
     }
+
+    private fun obtenerUbicacion() {
+        uiState = CiudadesEstado.Cargando
+        viewModelScope.launch {
+            try {
+                val location = location.getLocation()
+                if (location != null) {
+                    val lat = location.latitude
+                    val lon = location.longitude
+
+                    val ciudad = repositorio.buscarCiudadPorLatLon(lat, lon)
+
+                    if (ciudad != null) {
+                        seleccionar(ciudad)
+                    } else {
+                        uiState = CiudadesEstado.Error("No se pudo obtener la ciudad desde la ubicación.")
+                    }
+                } else {
+                    uiState = CiudadesEstado.Error("No se pudo obtener la ubicación.")
+                }
+            } catch (exception: Exception) {
+                uiState = CiudadesEstado.Error(exception.message ?: "Error al obtener ubicación.")
+            }
+        }
+    }
 }
 
 
 class CiudadesViewModelFactory(
     private val repositorio: Repositorio,
     private val router: Router,
-    private val location: Location
+    private val location: LocationImplementation
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

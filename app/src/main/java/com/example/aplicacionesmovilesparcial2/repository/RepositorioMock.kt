@@ -35,6 +35,11 @@ class RepositorioMock  : Repositorio {
     override suspend fun traerPronostico(lat: Float, lon: Float): List<ForecastHour> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun buscarCiudadPorLatLon(lat: Double, lon: Double): Ciudad? {
+        TODO("Not yet implemented")
+    }
+
 }
 
 
@@ -49,6 +54,10 @@ class RepositorioMockError  : Repositorio {
     }
 
     override suspend fun traerPronostico(lat: Float, lon: Float): List<ForecastHour> {
+        throw Exception()
+    }
+
+    override suspend fun buscarCiudadPorLatLon(lat: Double, lon: Double): Ciudad? {
         throw Exception()
     }
 }

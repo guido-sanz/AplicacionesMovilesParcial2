@@ -5,7 +5,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.aplicacionesmovilesparcial2.repository.RepositorioApi
-import com.example.aplicacionesmovilesparcial2.repository.modelos.Location
 import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationImplementation
 import com.example.aplicacionesmovilesparcial2.router.Enrutador
 
