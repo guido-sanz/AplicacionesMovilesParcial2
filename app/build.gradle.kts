@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
+    implementation(libs.play.services.location.license)
+    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
@@ -64,6 +66,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose-m3:2.1.2")
     implementation("com.patrykandpatrick.vico:multiplatform:2.1.2")
     implementation("com.patrykandpatrick.vico:views:2.1.2")
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
 
