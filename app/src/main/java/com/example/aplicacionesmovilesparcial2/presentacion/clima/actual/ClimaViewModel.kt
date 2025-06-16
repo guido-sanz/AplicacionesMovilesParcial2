@@ -31,18 +31,21 @@ class ClimaViewModel(
         viewModelScope.launch {
             try{
                 val clima = respositorio.traerClima(lat = lat, lon = lon)
-                uiState = ClimaEstado.Exitoso(
-                    ciudad = clima.name ,
-                    temperatura = clima.main.temp,
-                    descripcion = clima.weather.first().description,
-                    st = clima.main.feels_like,
-                )
+                if(clima != null){
+                    uiState = ClimaEstado.Exitoso(
+                        ciudad = clima.name ,
+                        temperatura = clima.main.temp,
+                        descripcion = clima.weather.first().description,
+                        st = clima.main.feels_like,
+                    )
+                } else {
+                    uiState = ClimaEstado.Vacio
+                }
             } catch (exception: Exception){
                 uiState = ClimaEstado.Error(exception.localizedMessage ?: "error desconocido")
             }
         }
     }
-
 }
 
 class ClimaViewModelFactory(

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -35,7 +36,7 @@ fun PronosticoView(
     onAction: (PronosticoIntencion)->Unit
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        onAction(PronosticoIntencion.actualizarClima)
+        onAction(PronosticoIntencion.actualizarPronostico)
     }
     Column(
         modifier = modifier
@@ -161,3 +162,56 @@ fun diaDeLaSemana(date: LocalDate): String {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PronosticoViewPreviewCargando() {
+    PronosticoView(
+        state = PronosticoEstado.Cargando,
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PronosticoViewPreviewVacio() {
+    PronosticoView(
+        state = PronosticoEstado.Vacio,
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PronosticoViewPreviewError() {
+    PronosticoView(
+        state = PronosticoEstado.Error("Error al obtener el pronóstico."),
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PronosticoViewPreviewExitoso() {
+    val mockForecast = listOf(
+        ForecastDay(
+            date = LocalDate.now(),
+            tempMin = 10.0,
+            tempMax = 20.0
+        ),
+        ForecastDay(
+            date = LocalDate.now().plusDays(1),
+            tempMin = 11.0,
+            tempMax = 22.0
+        ),
+        ForecastDay(
+            date = LocalDate.now().plusDays(2),
+            tempMin = 12.0,
+            tempMax = 23.0
+        )
+    )
+
+    PronosticoView(
+        state = PronosticoEstado.Exitoso(mockForecast),
+        onAction = {}
+    )
+}

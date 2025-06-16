@@ -1,6 +1,5 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.ciudades
 
-import android.location.Location
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,14 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
 import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationImplementation
+import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationRepository
 import com.example.aplicacionesmovilesparcial2.router.Router
-import com.example.aplicacionesmovilesparcial2.router.Ruta
 import kotlinx.coroutines.launch
 
 class CiudadesViewModel(
     val repositorio: Repositorio,
     val router: Router,
-    val location: LocationImplementation
+    val location: LocationRepository
 ) : ViewModel(){
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
@@ -42,19 +41,18 @@ class CiudadesViewModel(
                 } else {
                     uiState = CiudadesEstado.Resultado(ciudades)
                 }
-            } catch (exeption: Exception){
-                uiState = CiudadesEstado.Error(exeption.message ?: "error desconocido")
+            } catch (exception: Exception){
+                uiState = CiudadesEstado.Error(exception.message ?: "error desconocido")
             }
         }
     }
 
     private fun seleccionar(ciudad: Ciudad){
-        val ruta = Ruta.Clima(
+        router.irAClima(
             lat = ciudad.lat,
             lon = ciudad.lon,
             nombre = ciudad.name
         )
-        router.navegar(ruta)
     }
 
     private fun obtenerUbicacion() {
@@ -71,7 +69,7 @@ class CiudadesViewModel(
                     if (ciudad != null) {
                         seleccionar(ciudad)
                     } else {
-                        uiState = CiudadesEstado.Error("No se pudo obtener la ciudad desde la ubicación.")
+                        uiState = CiudadesEstado.Vacio
                     }
                 } else {
                     uiState = CiudadesEstado.Error("No se pudo obtener la ubicación.")

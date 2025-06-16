@@ -23,7 +23,7 @@ class PronosticoViewModel(
 
     fun ejecutar(intencion: PronosticoIntencion){
         when(intencion){
-            PronosticoIntencion.actualizarClima -> traerPronostico()
+            PronosticoIntencion.actualizarPronostico -> traerPronostico()
         }
     }
 
@@ -33,18 +33,21 @@ class PronosticoViewModel(
             try {
                 val forecastHours = respositorio.traerPronostico(lat, lon)
 
-                val dailyForecast = forecastHours.groupBy {
-                    // Extraer LocalDate desde la cadena dtTxt
-                    LocalDate.parse(it.dtTxt.substring(0, 10))
-                }.map { (date, forecasts) ->
-                    ForecastDay(
-                        date = date,
-                        tempMax = forecasts.maxOf { it.main.tempMax },
-                        tempMin = forecasts.minOf { it.main.tempMin }
-                    )
-                }.sortedBy { it.date }
+                if (forecastHours.isEmpty()) {
+                    uiState = PronosticoEstado.Vacio
+                } else {
+                    val dailyForecast = forecastHours.groupBy {
+                        LocalDate.parse(it.dtTxt.substring(0, 10))
+                    }.map { (date, forecasts) ->
+                        ForecastDay(
+                            date = date,
+                            tempMax = forecasts.maxOf { it.main.tempMax },
+                            tempMin = forecasts.minOf { it.main.tempMin }
+                        )
+                    }.sortedBy { it.date }
 
-                uiState = PronosticoEstado.Exitoso(dailyForecast)
+                    uiState = PronosticoEstado.Exitoso(dailyForecast)
+                }
             } catch (exception: Exception) {
                 uiState = PronosticoEstado.Error(exception.localizedMessage ?: "error desconocido")
             }

@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
 
@@ -299,6 +300,56 @@ fun AnimatedGradientBackground() {
                     colors = listOf(color1, color2)
                 )
             )
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CiudadesViewPreviewVacio() {
+    CiudadesView(
+        state = CiudadesEstado.Vacio,
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CiudadesViewPreviewCargando() {
+    CiudadesView(
+        state = CiudadesEstado.Cargando,
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CiudadesViewPreviewError() {
+    CiudadesView(
+        state = CiudadesEstado.Error("Hubo un error al buscar las ciudades."),
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CiudadesViewPreviewSinResultados() {
+    CiudadesView(
+        state = CiudadesEstado.Resultado(ciudades = emptyList()),
+        onAction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CiudadesViewPreviewConResultados() {
+    val ciudades = listOf(
+        Ciudad(name = "Buenos Aires", lat = -34.61f, lon = -58.38f, country = "AR", state = "Buenos Aires"),
+        Ciudad(name = "Córdoba", lat = -31.42f, lon = -64.18f, country = "AR", state = "Córdoba")
+    )
+
+    CiudadesView(
+        state = CiudadesEstado.Resultado(ciudades = ciudades),
+        onAction = {}
     )
 }
 
