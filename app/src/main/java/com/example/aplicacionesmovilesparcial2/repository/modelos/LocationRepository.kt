@@ -8,6 +8,23 @@ import kotlin.coroutines.resume
 
 interface LocationRepository {
     suspend fun getLocation() : Location?
+    fun getLocation2(onReturn: (Location?) -> Unit)
+}
+
+class LocationRepositoryMock : LocationRepository {
+    override suspend fun getLocation(): Location? {
+        var location = Location(null)
+        location.latitude = -34.234
+        location.longitude = -58.234
+        return location
+    }
+
+    override fun getLocation2(onReturn: (Location?) -> Unit) {
+        var location = Location(null)
+        location.latitude = -34.234
+        location.longitude = -58.234
+        return onReturn(location)
+    }
 }
 
 class LocationImplementation(private val context: Context) : LocationRepository {
@@ -23,6 +40,10 @@ class LocationImplementation(private val context: Context) : LocationRepository 
                 continuation.resume(null)
             }
         }
+    }
+
+    override fun getLocation2(onReturn: (Location?) -> Unit) {
+        TODO("Not yet implemented")
     }
 }
 

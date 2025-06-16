@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.aplicacionesmovilesparcial2.repository.RepositorioApi
 import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationImplementation
-import com.example.aplicacionesmovilesparcial2.router.Enrutador
+import com.example.aplicacionesmovilesparcial2.router.RouterImplementation
 
 @Composable
 fun CiudadesPage(
@@ -16,7 +16,7 @@ fun CiudadesPage(
     val viewModel : CiudadesViewModel = viewModel(
         factory = CiudadesViewModelFactory(
             repositorio = RepositorioApi(),
-            router = Enrutador(navHostController),
+            router = RouterImplementation(navHostController),
             location = LocationImplementation(context)
         )
     )
