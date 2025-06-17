@@ -1,6 +1,5 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima
 
-<<<<<<< Updated upstream
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -9,9 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-=======
 import android.content.Intent
->>>>>>> Stashed changes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,17 +34,12 @@ import com.example.aplicacionesmovilesparcial2.presentacion.clima.pronostico.Pro
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.pronostico.PronosticoViewModel
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.pronostico.PronosticoViewModelFactory
 import com.example.aplicacionesmovilesparcial2.repository.RepositorioApi
-import com.example.aplicacionesmovilesparcial2.router.Enrutador
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-<<<<<<< Updated upstream
-=======
 import com.example.aplicacionesmovilesparcial2.router.RouterImplementation
 import androidx.compose.material3.IconButton
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-
->>>>>>> Stashed changes
 
 @Composable
 fun ClimaPage(
@@ -70,7 +62,7 @@ fun ClimaPage(
     val viewModel : ClimaViewModel = viewModel(
         factory = ClimaViewModelFactory(
             repositorio = RepositorioApi(),
-            router = Enrutador(navHostController),
+            router = RouterImplementation(navHostController),
             lat = lat,
             lon = lon,
             nombre = nombre
@@ -80,7 +72,7 @@ fun ClimaPage(
     val pronosticoViewModel : PronosticoViewModel = viewModel(
         factory = PronosticoViewModelFactory(
             repositorio = RepositorioApi(),
-            router = Enrutador(navHostController),
+            router = RouterImplementation(navHostController),
             lat = lat,
             lon = lon,
             nombre = nombre

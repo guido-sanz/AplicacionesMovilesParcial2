@@ -9,17 +9,16 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.aplicacionesmovilesparcial2.presentacion.ciudades.CiudadesPage
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.ClimaPage
-import com.example.aplicacionesmovilesparcial2.router.Ruta
 
 @Composable
 fun MainPage() {
     val navHostController = rememberNavController()
     NavHost(
         navController = navHostController,
-        startDestination = Ruta.Ciudades.id
+        startDestination = "ciudades"
     ) {
         composable(
-            route = Ruta.Ciudades.id
+            "ciudades"
         ) {
             CiudadesPage(navHostController)
         }

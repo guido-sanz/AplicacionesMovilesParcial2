@@ -1,10 +1,20 @@
 package com.example.aplicacionesmovilesparcial2.router
 
+import androidx.navigation.NavController
+
 interface Router {
-    fun navegar(ruta: Ruta)
+    fun irACiudades()
+    fun irAClima(lat: Float, lon: Float, nombre: String)
 }
 
-sealed class Ruta(val id: String) {
-    data object Ciudades: Ruta("ciudades")
-    data class Clima(val lat: Float,val lon:Float, val nombre:String): Ruta("clima")
+class RouterImplementation(private val navController: NavController) : Router {
+
+    override fun irACiudades() {
+        navController.navigate("ciudades")
+    }
+
+    override fun irAClima(lat: Float, lon: Float, nombre: String) {
+        val ruta = "clima?lat=$lat&lon=$lon&nombre=${nombre}"
+        navController.navigate(ruta)
+    }
 }
