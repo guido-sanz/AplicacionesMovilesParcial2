@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.aplicacionesmovilesparcial2.preferencias.Preferencias
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.repository.modelos.Ciudad
 import com.example.aplicacionesmovilesparcial2.repository.modelos.LocationImplementation
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 class CiudadesViewModel(
     val repositorio: Repositorio,
     val router: Router,
-    val location: LocationRepository
+    val location: LocationRepository,
+    val preferencias: Preferencias
 ) : ViewModel(){
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
@@ -48,6 +50,11 @@ class CiudadesViewModel(
     }
 
     private fun seleccionar(ciudad: Ciudad){
+        preferencias.guardarCiudad(
+            nombre = ciudad.name,
+            lat = ciudad.lat,
+            lon = ciudad.lon
+        )
         router.irAClima(
             lat = ciudad.lat,
             lon = ciudad.lon,
@@ -85,12 +92,13 @@ class CiudadesViewModel(
 class CiudadesViewModelFactory(
     private val repositorio: Repositorio,
     private val router: Router,
-    private val location: LocationImplementation
+    private val location: LocationImplementation,
+    private val preferencias: Preferencias
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CiudadesViewModel::class.java)) {
-            return CiudadesViewModel(repositorio,router, location) as T
+            return CiudadesViewModel(repositorio,router, location, preferencias) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

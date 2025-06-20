@@ -1,5 +1,6 @@
 package com.example.aplicacionesmovilesparcial2
 
+import com.example.aplicacionesmovilesparcial2.preferencias.PreferenciasMock
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.actual.ClimaEstado
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.actual.ClimaIntencion
 import com.example.aplicacionesmovilesparcial2.presentacion.clima.actual.ClimaViewModel
@@ -42,7 +43,8 @@ class ClimaViewModelTest{
             router = MockRouter(),
             lat = -34.6f,
             lon = -58.4f,
-            nombre = "Buenos Aires"
+            nombre = "Buenos Aires",
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(ClimaIntencion.actualizarClima)
@@ -63,7 +65,8 @@ class ClimaViewModelTest{
             router = MockRouter(),
             lat = -34.0f,
             lon = -58.0f,
-            nombre = "Buenos Aires"
+            nombre = "Buenos Aires",
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(ClimaIntencion.actualizarClima)
@@ -85,7 +88,8 @@ class ClimaViewModelTest{
             router = MockRouter(),
             lat = -34.6f,
             lon = -58.0f,
-            nombre = "Buenos Aires"
+            nombre = "Buenos Aires",
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(ClimaIntencion.actualizarClima)
