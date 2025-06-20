@@ -1,13 +1,5 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +32,8 @@ import com.example.aplicacionesmovilesparcial2.router.RouterImplementation
 import androidx.compose.material3.IconButton
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import com.example.aplicacionesmovilesparcial2.preferencias.PreferenciasUsuario
+
 
 @Composable
 fun ClimaPage(
@@ -49,6 +43,7 @@ fun ClimaPage(
     nombre: String
 ){
     val context = LocalContext.current
+    val preferencias = PreferenciasUsuario(context)
 
     val urlCompartir = remember(nombre, lat, lon) {
         val nombreCodificado = URLEncoder.encode(nombre, StandardCharsets.UTF_8.toString())
@@ -65,7 +60,8 @@ fun ClimaPage(
             router = RouterImplementation(navHostController),
             lat = lat,
             lon = lon,
-            nombre = nombre
+            nombre = nombre,
+            preferencias = preferencias
         )
     )
 

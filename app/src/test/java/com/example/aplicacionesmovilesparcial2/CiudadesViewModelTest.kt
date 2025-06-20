@@ -1,5 +1,6 @@
 package com.example.aplicacionesmovilesparcial2
 
+import com.example.aplicacionesmovilesparcial2.preferencias.PreferenciasMock
 import com.example.aplicacionesmovilesparcial2.presentacion.ciudades.CiudadesEstado
 import com.example.aplicacionesmovilesparcial2.presentacion.ciudades.CiudadesIntencion
 import com.example.aplicacionesmovilesparcial2.presentacion.ciudades.CiudadesViewModel
@@ -52,10 +53,11 @@ class CiudadesViewModelTest {
             )
         )
 
-        var viewModel = CiudadesViewModel(
+        val viewModel = CiudadesViewModel(
             router = MockRouter(),
             location = LocationRepositoryMock(),
-            repositorio = RepositorioMock()
+            repositorio = RepositorioMock(),
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(CiudadesIntencion.Buscar("Mendoza"))
@@ -73,7 +75,8 @@ class CiudadesViewModelTest {
         val viewModel = CiudadesViewModel(
             router = MockRouter(),
             location = LocationRepositoryMock(),
-            repositorio = RepositorioMock()
+            repositorio = RepositorioMock(),
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(CiudadesIntencion.Buscar("Desconocida"))
@@ -90,7 +93,8 @@ class CiudadesViewModelTest {
         val viewModel = CiudadesViewModel(
             router = MockRouter(),
             location = LocationRepositoryMock(),
-            repositorio = RepositorioMockError()
+            repositorio = RepositorioMockError(),
+            preferencias = PreferenciasMock()
         )
 
         viewModel.ejecutar(CiudadesIntencion.Buscar("Error"))
@@ -110,7 +114,8 @@ class CiudadesViewModelTest {
         val viewModel = CiudadesViewModel(
             router = router,
             location = LocationRepositoryMock(),
-            repositorio = RepositorioMock()
+            repositorio = RepositorioMock(),
+            preferencias = PreferenciasMock()
         )
 
         val ciudad = Ciudad(

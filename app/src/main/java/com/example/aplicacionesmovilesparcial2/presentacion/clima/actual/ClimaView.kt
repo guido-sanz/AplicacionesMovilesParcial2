@@ -11,6 +11,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.example.aplicacionesmovilesparcial2.ui.theme.AplicacionesMovilesParcial2Theme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ButtonDefaults
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -40,12 +47,33 @@ fun ClimaView(
     ) {
         when (state) {
             is ClimaEstado.Error -> ErrorView(mensaje = state.mensaje)
-            is ClimaEstado.Exitoso -> ClimaDetalle(
-                ciudad = state.ciudad,
-                temperatura = state.temperatura,
-                descripcion = state.descripcion,
-                st = state.st
-            )
+            is ClimaEstado.Exitoso -> {
+                OutlinedButton(
+                    onClick = { onAction(ClimaIntencion.cambiarCiudad) },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 8.dp, end = 8.dp),
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "Cambiar ciudad",
+                        modifier = Modifier.padding(end = 6.dp)
+                    )
+                    Text("Cambiar ciudad")
+                }
+
+                ClimaDetalle(
+                    ciudad = state.ciudad,
+                    temperatura = state.temperatura,
+                    descripcion = state.descripcion,
+                    st = state.st
+                )
+            }
             ClimaEstado.Vacio -> LoadingView()
             ClimaEstado.Cargando -> EmptyView()
         }
@@ -57,7 +85,7 @@ fun ClimaView(
 fun ClimaDetalle(ciudad: String, temperatura: Double, descripcion: String, st: Double) {
     Card(
         modifier = Modifier
-            .padding(horizontal = 24.dp, vertical = 32.dp)
+            .padding(horizontal = 24.dp, vertical = 10.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
         colors = CardDefaults.cardColors(
@@ -79,7 +107,7 @@ fun ClimaDetalle(ciudad: String, temperatura: Double, descripcion: String, st: D
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${String.format("%.2f", temperatura)}°C",
+                text = "${temperatura.roundToInt()}°C",
                 style = MaterialTheme.typography.displayMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -91,7 +119,7 @@ fun ClimaDetalle(ciudad: String, temperatura: Double, descripcion: String, st: D
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Sensación térmica: ${String.format("%.2f", st)}°C",
+                text = "Sensación térmica: ${st.roundToInt()}°C",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )

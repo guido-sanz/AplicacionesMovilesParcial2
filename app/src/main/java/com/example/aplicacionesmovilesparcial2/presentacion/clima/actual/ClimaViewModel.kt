@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.aplicacionesmovilesparcial2.preferencias.Preferencias
 import com.example.aplicacionesmovilesparcial2.repository.Repositorio
 import com.example.aplicacionesmovilesparcial2.router.Router
 import kotlinx.coroutines.launch
@@ -15,7 +16,8 @@ class ClimaViewModel(
     val router: Router,
     val lat : Float,
     val lon : Float,
-    val nombre: String
+    val nombre: String,
+    val preferencias: Preferencias
 ) : ViewModel() {
 
     var uiState by mutableStateOf<ClimaEstado>(ClimaEstado.Vacio)
@@ -23,6 +25,8 @@ class ClimaViewModel(
     fun ejecutar(intencion: ClimaIntencion){
         when(intencion){
             ClimaIntencion.actualizarClima -> traerClima()
+            ClimaIntencion.cambiarCiudad -> cambiarCiudad()
+
         }
     }
 
@@ -46,6 +50,11 @@ class ClimaViewModel(
             }
         }
     }
+
+    fun cambiarCiudad() {
+        preferencias.borrarCiudad()
+        router.irACiudades()
+    }
 }
 
 class ClimaViewModelFactory(
@@ -54,11 +63,13 @@ class ClimaViewModelFactory(
     private val lat: Float,
     private val lon: Float,
     private val nombre: String,
+    val preferencias: Preferencias
+
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ClimaViewModel::class.java)) {
-            return ClimaViewModel(repositorio,router,lat,lon,nombre) as T
+            return ClimaViewModel(repositorio,router,lat,lon,nombre,preferencias) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
