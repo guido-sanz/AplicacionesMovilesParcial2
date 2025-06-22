@@ -1,6 +1,9 @@
 package com.example.aplicacionesmovilesparcial2.presentacion.clima.actual
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +14,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,9 +25,12 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.example.aplicacionesmovilesparcial2.ui.theme.AplicacionesMovilesParcial2Theme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.platform.LocalContext
 import kotlin.math.roundToInt
 
 
@@ -33,7 +38,9 @@ import kotlin.math.roundToInt
 fun ClimaView(
     modifier: Modifier = Modifier,
     state: ClimaEstado,
-    onAction: (ClimaIntencion) -> Unit
+    onAction: (ClimaIntencion) -> Unit,
+    mensajeCompartir: String,
+    context: Context
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         onAction(ClimaIntencion.actualizarClima)
@@ -71,7 +78,9 @@ fun ClimaView(
                     ciudad = state.ciudad,
                     temperatura = state.temperatura,
                     descripcion = state.descripcion,
-                    st = state.st
+                    st = state.st,
+                    mensajeCompartir = mensajeCompartir,
+                    context = context
                 )
             }
             ClimaEstado.Vacio -> LoadingView()
@@ -82,7 +91,14 @@ fun ClimaView(
 }
 
 @Composable
-fun ClimaDetalle(ciudad: String, temperatura: Double, descripcion: String, st: Double) {
+fun ClimaDetalle(
+    ciudad: String,
+    temperatura: Double,
+    descripcion: String,
+    st: Double,
+    mensajeCompartir: String,
+    context: Context
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 24.dp, vertical = 10.dp)
@@ -93,36 +109,61 @@ fun ClimaDetalle(ciudad: String, temperatura: Double, descripcion: String, st: D
         ),
         shape = MaterialTheme.shapes.large
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .padding(32.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
-            Text(
-                text = ciudad,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "${temperatura.roundToInt()}°C",
-                style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = descripcion.replaceFirstChar { it.uppercase() },
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Sensación térmica: ${st.roundToInt()}°C",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            IconButton(
+                onClick = {
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, mensajeCompartir)
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Compartir",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(top = 16.dp) // Evita que se superponga con el botón
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = ciudad,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "${temperatura.roundToInt()}°C",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = descripcion.replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Sensación térmica: ${st.roundToInt()}°C",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
         }
     }
 }
@@ -158,7 +199,12 @@ fun ErrorView(mensaje: String) {
 @Composable
 fun ClimaPreviewVacio() {
     AplicacionesMovilesParcial2Theme {
-        ClimaView(state = ClimaEstado.Vacio, onAction = {})
+        ClimaView(
+            state = ClimaEstado.Vacio,
+            onAction = {},
+            mensajeCompartir = "",
+            context = LocalContext.current
+        )
     }
 }
 
@@ -166,7 +212,12 @@ fun ClimaPreviewVacio() {
 @Composable
 fun ClimaPreviewError() {
     AplicacionesMovilesParcial2Theme {
-        ClimaView(state = ClimaEstado.Error("¡Ups! Ocurrió un error al obtener el clima."), onAction = {})
+        ClimaView(
+            state = ClimaEstado.Error("¡Ups! Ocurrió un error al obtener el clima."),
+            onAction = {},
+            mensajeCompartir = "",
+            context = LocalContext.current
+        )
     }
 }
 
@@ -181,7 +232,9 @@ fun ClimaPreviewExitoso() {
                 descripcion = "parcialmente nublado",
                 st = 24.0
             ),
-            onAction = {}
+            onAction = {},
+            mensajeCompartir =  "",
+            context = LocalContext.current
         )
     }
 }
